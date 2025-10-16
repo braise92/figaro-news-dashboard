@@ -156,16 +156,47 @@
     </div>
 
     <script>
-        // Cette fonction sera mise à jour par n8n
-        function loadArticles() {
-            // Pour l'instant, on affiche un message d'attente
-            document.getElementById('articles').innerHTML = `
-                <p>⏳ En attente de la première mise à jour automatique...</p>
-                <p style="font-size: 0.9em; margin-top: 10px;">Le workflow n8n alimentera cette page chaque jour.</p>
-            `;
-            
-            const now = new Date().toLocaleString('fr-FR');
-            document.getElementById('last-update').textContent = `Dernière vérification: ${now}`;
+        // Charger les articles depuis data.json
+        async function loadArticles() {
+            try {
+                // Récupérer data.json
+                const response = await fetch('https://raw.githubusercontent.com/braise92/figaro-news-dashboard/main/data.json');
+                const data = await response.json();
+
+                // Vérifier s'il y a des articles
+                if (!data || !Array.isArray(data) || data.length === 0) {
+                    document.getElementById('articles').innerHTML = `
+                        <p>⏳ En attente de la première mise à jour automatique...</p>
+                        <p style="font-size: 0.9em; margin-top: 10px;">Le workflow n8n alimentera cette page chaque jour.</p>
+                    `;
+                } else {
+                    // Afficher les articles
+                    let html = '';
+                    data.forEach(article => {
+                        html += `
+                            <div class="article">
+                                <h3><a href="${article.link || '#'}" target="_blank">${article.title || 'Sans titre'}</a></h3>
+                                <p class="date">${article.pubDate || 'Date inconnue'}</p>
+                                <p class="resume">${article.summary || 'Pas de résumé disponible'}</p>
+                            </div>
+                        `;
+                    });
+                    document.getElementById('articles').innerHTML = html;
+                }
+
+                // Afficher la date de dernière mise à jour
+                const now = new Date().toLocaleString('fr-FR');
+                document.getElementById('last-update').textContent = `Dernière vérification: ${now}`;
+
+            } catch (error) {
+                console.error('Erreur:', error);
+                document.getElementById('articles').innerHTML = `
+                    <div class="error">
+                        <p>❌ Erreur lors du chargement des articles</p>
+                        <p style="font-size: 0.9em; margin-top: 10px;">Vérifiez que data.json est accessible</p>
+                    </div>
+                `;
+            }
         }
 
         // Charger au démarrage
