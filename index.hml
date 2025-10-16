@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>📰 Dashboard Figaro - Veille Quotidienne</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #1f1c2c 0%, #928dab 100%);
+            color: white;
+            padding: 40px 20px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            font-size: 1.1em;
+            opacity: 0.9;
+        }
+
+        .content {
+            padding: 30px 20px;
+        }
+
+        .section {
+            margin-bottom: 30px;
+        }
+
+        .section h2 {
+            color: #667eea;
+            font-size: 1.5em;
+            margin-bottom: 20px;
+            border-bottom: 3px solid #667eea;
+            padding-bottom: 10px;
+        }
+
+        .article {
+            background: #f8f9fa;
+            padding: 15px;
+            margin-bottom: 15px;
+            border-radius: 8px;
+            border-left: 4px solid #667eea;
+            transition: all 0.3s ease;
+        }
+
+        .article:hover {
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.1);
+            transform: translateX(5px);
+        }
+
+        .article h3 {
+            margin-bottom: 8px;
+        }
+
+        .article h3 a {
+            color: #1f1c2c;
+            text-decoration: none;
+            font-size: 1.1em;
+        }
+
+        .article h3 a:hover {
+            color: #667eea;
+            text-decoration: underline;
+        }
+
+        .date {
+            color: #999;
+            font-size: 0.9em;
+            margin-bottom: 8px;
+        }
+
+        .resume {
+            color: #333;
+            line-height: 1.6;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 40px;
+            color: #667eea;
+            font-size: 1.2em;
+        }
+
+        .error {
+            background: #fee;
+            color: #c33;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px;
+        }
+
+        .footer {
+            background: #f8f9fa;
+            padding: 20px;
+            text-align: center;
+            color: #999;
+            font-size: 0.9em;
+            border-top: 1px solid #eee;
+        }
+
+        @media (max-width: 600px) {
+            .header h1 {
+                font-size: 1.8em;
+            }
+            
+            .content {
+                padding: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>📰 Figaro News Dashboard</h1>
+            <p>Votre veille quotidienne automatisée</p>
+        </div>
+
+        <div class="content">
+            <div class="section">
+                <h2>📰 Articles du jour</h2>
+                <div id="articles" class="loading">Chargement des articles...</div>
+            </div>
+        </div>
+
+        <div class="footer">
+            <p>Mis à jour automatiquement chaque matin à 7h</p>
+            <p id="last-update"></p>
+        </div>
+    </div>
+
+    <script>
+        // Cette fonction sera mise à jour par n8n
+        function loadArticles() {
+            // Pour l'instant, on affiche un message d'attente
+            document.getElementById('articles').innerHTML = `
+                <p>⏳ En attente de la première mise à jour automatique...</p>
+                <p style="font-size: 0.9em; margin-top: 10px;">Le workflow n8n alimentera cette page chaque jour.</p>
+            `;
+            
+            const now = new Date().toLocaleString('fr-FR');
+            document.getElementById('last-update').textContent = `Dernière vérification: ${now}`;
+        }
+
+        // Charger au démarrage
+        loadArticles();
+        
+        // Actualiser toutes les heures
+        setInterval(loadArticles, 3600000);
+    </script>
+</body>
+</html>
